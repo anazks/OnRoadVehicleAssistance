@@ -1,0 +1,103 @@
+<body  style="background-image: url(https://images.pexels.com/photos/3935702/pexels-photo-3935702.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);">
+    
+    <div class="map" style="margin-top: 10px;">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15718.63014975125!2d76.28265615000001!3d9.962424350000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1642149426233!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+    </iframe>
+</div>
+
+
+    <div class="container">
+     
+    {{#each result}}
+   
+     <div class="card border-primary mb-3" style="max-width: 100%;">
+  <div class="card-header" style="text-align: center; font-weight: bold; background-color:rgb(226, 225, 213);">Todays Booking</div>
+    <h2 class="heading" style="text-align: center;margin-top:10px; font-weight: bold;" id="showdata">Current location</h2>
+  <div class="card-body text-primary">
+        <p style="color: black; font-weight: bold;">Name</p>
+    <h5 class="card-title" >{{this.username}}</h5>
+    <input type="hidden" value="{{this.username}}" name="" id="name">
+    <p style="color: black; font-weight: bold;">Mobile</p>
+        <p class="card-text">{{this.usermobile}}</p>
+        <p style="color: black; font-weight: bold;">Email ID</p>
+         <p class="card-text">{{this.useremail}}</p>
+         <p style="color: black; font-weight: bold;">Booking time</p>
+         <p class="card-text">{{this.time}}</p>
+         
+
+           <p style="color: black; font-weight: bold;">Vihicle Type</p>
+         <p class="card-text">{{this.type}}</p>
+         <input  id="lati" type="hidden" value="{{this.lat}}" name="lat" >
+           <input  id="longt" type="hidden" value="{{this.longt}}" name="longt" >
+       
+        <div class="row">
+            <div class="col">
+                 <a href="/reject/{{this.id}}/{{this.useremail}}" class="btn btn-danger">Reject</a>
+                  <a href="/approveReq/{{this.id}}/{{this.shopname}}/{{this.time}}/{{this.useremail}}/{{this.email}}" class="btn btn-success">Approve</a>
+                  <a href="#" class="btn btn-primary" id="gio">Check Location</a>
+            </div>
+        </div>
+</div>
+</div>
+    {{/each}}
+</div>
+
+
+
+
+
+
+<script>
+     const button = document.getElementById("gio");
+button.addEventListener("click", ()=>{
+    if(navigator.geolocation){
+        button.innerText = "Allow gmap to detect location";
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }else{
+        button.innerText = "Your browser not support";
+    }
+});
+function onSuccess(position){
+      var locationData = document.getElementById('showdata');
+      var name = document.getElementById('name').value;
+      console.log(name)
+    locationData.innerText = `Detecting ${name}  location`;
+    let {latitude, longitude} = position.coords;
+    
+    var x = document.getElementById("lati").value;
+    console.log(x);
+    //longth
+    var y = document.getElementById("longt").value;
+    
+   // document.getElementById("lati").value =latitude ;
+     //document.getElementById("longti").value =latitude ;
+        console.log(y)
+   
+    console.log("----------------this is position")
+    console.log(latitude);
+      console.log(longitude);
+
+    //8bb9d1ee2d9743e29d3f1216c002b2f4
+    fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=8bb9d1ee2d9743e29d3f1216c002b2f4`)
+    .then(response => response.json()).then(response =>{
+        let allDetails = response.results[0].components;
+        console.table(allDetails);
+        let {suburb, postcode, city} = allDetails;
+      
+        locationData.innerText = `${suburb} ${postcode}, ${city}`;
+    }).catch(()=>{
+        button.innerText = "Something went wrong";
+    });
+}
+function onError(error){
+    if(error.code == 1){
+        button.innerText = "You denied the request";
+    }else if(error.code == 2){
+        button.innerText = "Location is unavailable";
+    }else{
+        button.innerText = "Something went wrong";
+    }
+    button.setAttribute("disabled", "true");
+}
+</script>
+</body>

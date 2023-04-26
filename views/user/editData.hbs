@@ -1,0 +1,33 @@
+ <body style="background-image: url(https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1); background-repeat: no-repeat; background-size: cover;">
+
+ <div>
+        <h2 class="heading" style="text-align: center;margin-top:10px">UPDATE YOUR INFO</h2>
+    </div>
+<div class="container">
+    <form action="/users/update" method="POST">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" name="email" value="{{data.email}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div id="emailHelp"  class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Username</label>
+    <input type="text"name="username" value="{{data.username}}" class="form-control" id="exampleInputPassword1">
+  </div>
+   <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Mobile</label>
+    <input type="number" name="mobile" value="{{data.mobile}}" class="form-control" id="exampleInputPassword1">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="text" name="password" value="{{data.password}}" class="form-control" id="exampleInputPassword1">
+  </div>
+  <div class="mb-3">
+ 
+    <input type="hidden" value="{{data.id}}" name="id" class="form-control" id="exampleInputPassword1">
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+</div>
+</body>
